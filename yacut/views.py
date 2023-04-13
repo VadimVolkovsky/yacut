@@ -1,48 +1,40 @@
+from flask import abort, flash, redirect, render_template
+
+from yacut.forms import UrlForm
+from yacut.models import URLMap
+from yacut.utils import check_custom_id_exists, create_short_link
+
 from . import app, db
-from flask import redirect, render_template, url_for
-from short_links_app.forms import UrlForm
-from short_links_app.models import URLMap
 
-import random  
-import string  
+main_url = 'http://localhost/'
 
-
-def generate_custom_id(letter_count=3, digit_count=3): 
-    """Генерирурет строку из заданного количества символов""" 
-    str1 = ''.join((random.choice(string.ascii_letters) for x in range(letter_count)))
-    str1 += ''.join((random.choice(string.digits) for x in range(digit_count)))
-  
-    letters_and_digits = list(str1)
-    random.shuffle(letters_and_digits)  
-    custom_id = ''.join(letters_and_digits)
-    return custom_id  
+@app.route('/<path:custom_id>', methods=['GET'])
+def redirect_view(custom_id):
+    short_url = check_custom_id_exists(custom_id)
+    if short_url is not None:
+        original_url = short_url.original
+        return redirect(original_url)
+    abort(404)
 
 
-def create_short_link(custom_id=None):
-    main_url = 'http://127.0.0.1:5000/'
-    if custom_id is None:
-        custom_id = generate_custom_id()
-    short_url = main_url + custom_id
-    return short_url
-    
-
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index_view():
-    return render_template('index.html')
-
-
-@app.route('/add', methods=['GET', 'POST'])
-def add_url_view():
     form = UrlForm()
     if form.validate_on_submit():
+        # print('форма валидна')
         custom_id = form.custom_id.data
-        short = create_short_link(custom_id)
-        short_url = URLMap(
-            original=form.original.data,
-            short=short
+        if custom_id is None or len(custom_id) == 0:
+            short_url, custom_id = create_short_link()
+        else:
+            if check_custom_id_exists(custom_id):
+                flash(f'Имя {custom_id} уже занято!')
+                return render_template('index.html', form=form)
+        urlmap = URLMap(
+            original=form.original_link.data,
+            short=custom_id
         )
-        db.session.add(short_url)
+        short_url = main_url + custom_id
+        db.session.add(urlmap)
         db.session.commit()
-        return redirect(url_for('index_view', short_url=short))
+        return render_template('index.html', short_url=short_url, form=form)
     return render_template('index.html', form=form)

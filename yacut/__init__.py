@@ -1,8 +1,9 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from settings import Config
-import os
 
 template_dir = os.path.abspath('html')
 static_dir = os.path.abspath('html')
