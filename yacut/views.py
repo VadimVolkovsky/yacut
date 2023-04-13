@@ -1,4 +1,5 @@
 from flask import abort, flash, redirect, render_template
+from settings import MAIN_URL
 
 from yacut.forms import UrlForm
 from yacut.models import URLMap
@@ -6,7 +7,6 @@ from yacut.utils import check_custom_id_exists, create_short_link
 
 from . import app, db
 
-main_url = 'http://localhost/'
 
 @app.route('/<path:custom_id>', methods=['GET'])
 def redirect_view(custom_id):
@@ -21,7 +21,6 @@ def redirect_view(custom_id):
 def index_view():
     form = UrlForm()
     if form.validate_on_submit():
-        # print('форма валидна')
         custom_id = form.custom_id.data
         if custom_id is None or len(custom_id) == 0:
             short_url, custom_id = create_short_link()
@@ -33,7 +32,7 @@ def index_view():
             original=form.original_link.data,
             short=custom_id
         )
-        short_url = main_url + custom_id
+        short_url = MAIN_URL + custom_id
         db.session.add(urlmap)
         db.session.commit()
         return render_template('index.html', short_url=short_url, form=form)

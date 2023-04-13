@@ -2,6 +2,8 @@
 import random
 import string
 
+from settings import MAIN_URL
+
 from yacut.models import URLMap
 
 
@@ -27,8 +29,7 @@ def generate_custom_id(letter_count=3, digit_count=3):
 
 def create_short_link(custom_id=None):
     """Создает короткую ссылку"""
-    main_url = 'http://localhost/'
     if custom_id is None:
         custom_id = generate_custom_id()
-    short = main_url + custom_id
+    short = MAIN_URL + custom_id
     return short, custom_id

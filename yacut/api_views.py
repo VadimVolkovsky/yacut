@@ -10,6 +10,7 @@ from . import app, db
 
 pattern = re.compile('^[a-zA-Z0-9]{1,16}$')
 
+
 @app.route('/api/id/<string:short_id>/', methods=['GET'])
 def get_url(short_id):
     short_url = URLMap.query.filter_by(short=short_id).first()
@@ -21,7 +22,6 @@ def get_url(short_id):
 @app.route('/api/id/', methods=['POST'])
 def add_url():
     data = request.get_json()
-
     if data is None:
         raise InvalidAPIUsage('Отсутствует тело запроса')
     if 'url' not in data:
@@ -50,7 +50,4 @@ def add_url():
     urlmap.from_dict(data)
     db.session.add(urlmap)
     db.session.commit()
-    return jsonify({
-        'url': data['url'],
-        'short_link': short_link,
-    }), 201
+    return jsonify({'url': data['url'], 'short_link': short_link, }), 201

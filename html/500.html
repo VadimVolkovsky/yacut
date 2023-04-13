@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block title %}500. Хьюстон, у нас проблемы!{% endblock %}
+{% extends "base.html" %}
+{% block title %}500. Хьюстон, у нас проблемы!{% endblock title %}
 {% block content %}
 <main>
   <section class="container my-5">
@@ -12,10 +12,7 @@
           минут.
         </p>
       </div>
-      {% comment %} <div class="col-12 col-lg-5">
-        <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/500.png') }}" alt="" />
-      </div> {% endcomment %}
     </div>
   </section>
 </main>
-{% endblock %}
+{% endblock content %}
