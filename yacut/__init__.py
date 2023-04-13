@@ -14,7 +14,6 @@ app = Flask(
 )
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-db.create_all()
 migrate = Migrate(app, db)
 
 from . import api_views, error_handlers, views
