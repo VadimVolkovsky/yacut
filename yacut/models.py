@@ -26,22 +26,26 @@ class URLMap(db.Model):
                 field_name = fields[field]
                 setattr(self, field_name, data[field])
 
+    @staticmethod
     def create_short_link(custom_id):
         """Создает короткую ссылку"""
         short_link = MAIN_URL + custom_id
         return short_link
 
+    @staticmethod
     def generate_custom_id():
         """Генерирурет случайную строку"""
         custom_id = str(uuid.uuid4())[:CUSTOM_ID_MAX_GENERATED_LENGTH]
         return custom_id
 
+    @staticmethod
     def check_custom_id_exists(short_id):
         """Метод ищет и возвращает из БД объект URLMap по
         short_id(custom_id), если ничего не найдено вернется None"""
         urlmap = URLMap.query.filter_by(short=short_id).first()
         return urlmap
 
+    @staticmethod
     def save_to_db(data):
         """Сохраняет новый объект в БД"""
         urlmap = URLMap()
@@ -49,6 +53,7 @@ class URLMap(db.Model):
         db.session.add(urlmap)
         db.session.commit()
 
+    @staticmethod
     def validate_api_fields(data):
         """Валидация полей переданных через API"""
         if data is None:
@@ -64,7 +69,7 @@ class URLMap(db.Model):
         data[CUSTOM_ID] = custom_id
         return data
 
-    @classmethod
+    @staticmethod
     def validate_custom_id(custom_id):
         """Валидация поля custom_id"""
         if custom_id is None or len(custom_id) == 0:
