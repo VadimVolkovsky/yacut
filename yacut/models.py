@@ -64,6 +64,7 @@ class URLMap(db.Model):
         data[CUSTOM_ID] = custom_id
         return data
 
+    @classmethod
     def validate_custom_id(custom_id):
         """Валидация поля custom_id"""
         if custom_id is None or len(custom_id) == 0:
