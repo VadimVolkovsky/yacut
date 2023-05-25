@@ -1,7 +1,8 @@
 import os
 import re
 
-MAIN_URL = 'http://localhost/'
+# MAIN_URL = 'http://localhost/'
+MAIN_URL = 'http://127.0.0.1:5000/'
 CUSTOM_ID_MIN_LENGTH = 1
 CUSTOM_ID_MAX_LENGTH = 16
 CUSTOM_ID_REGEX = fr"[a-zA-Z0-9]{{{CUSTOM_ID_MIN_LENGTH},{CUSTOM_ID_MAX_LENGTH}}}$"
